@@ -1,18 +1,43 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div>
+        <div class="wrapper">
+            <v-head></v-head>
+            <v-sidebar></v-sidebar>
+        </div>
+    </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+
+import vHead from '../components/Header.vue';
+import vSidebar from '../components/Sidebar.vue';
 
 export default {
   name: 'Home',
+  data() {
+    return {
+        tagsList: [],
+        collapse: false
+    };
+  },
   components: {
-    HelloWorld
+    vHead,
+    vSidebar
+  },
+  created(){
+    this.$bus.$on('collapse-content', msg => {
+        this.collapse = msg;
+    });
+
+    // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
+    /*this.$bus.$on('tags', msg => {
+        let arr = [];
+        for (let i = 0, len = msg.length; i < len; i++) {
+            msg[i].name && arr.push(msg[i].name);
+        }
+        this.tagsList = arr;
+    });*/
   }
 }
 </script>
