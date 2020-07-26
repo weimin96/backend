@@ -71,7 +71,8 @@
 </style>
 
 <script type="text/javascript">
-    let vm;
+    import { mapState, mapActions } from 'vuex'
+
     export default {
         data: function(){
             return {
@@ -86,21 +87,25 @@
             }
         },
         mounted(){
-            vm = this;
+
         },
         methods: {
+            ...mapActions({
+                login: 'auth/login'
+            }),
             submitForm(){
                 this.$refs.login.validate(valid => {
                     if(valid){
                         // 后端请求
-                        this.$axios.post('/login',this.param).then(res => {
-                            if(res.data.code === 10000){
-                                this.$message.success(res.data.msg)
+                        // this['auth/login'](this.param)
+                        this.login(this.param).then(res=>{
+                            if(res.code === 10000){
+                                console.log("登录成功")
+                                this.$message.success(res.msg)
                                 this.$router.push('/');
                             }else{
-                                this.$message.error(res.data.msg)
+                                this.$message.error(res.msg)
                             }
-
                         })
 
                     }else{

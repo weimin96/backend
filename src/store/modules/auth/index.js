@@ -6,7 +6,7 @@ const state = {
     token: ''
 }
 
-// 这里的方法必须同步执行
+// 这里的方法必须同步执行 用于修改state里的数据
 const mutations = {
     setToken: (state, data) => {
         if(data){
@@ -16,8 +16,9 @@ const mutations = {
             Auth.removeToken()
             Auth.removeLoginStatus()
         }
-        state.token = data
-    }
+        state.token = data;
+    },
+
 }
 
 // 这里可以进行异步操作
@@ -30,10 +31,23 @@ const actions = {
                     token: state.token
                 }
             }).then((res) =>{
-                commit("setToken", res.token)
+                if(res.code === 10000){
+                    commit("setToken", res.data.token)
+                }
                 resolve()
             })
         })
+    },
+    // 登录
+    login({commit,state},param){
+        return new Promise((resolve) => {
+            console.log("登录请求")
+            axios.post('/login',param).then(res => {
+                commit("setToken", res.data.token)
+                resolve(res)
+            })
+        })
+
     }
 }
 

@@ -8,7 +8,6 @@ export default {
     'post|/login': option => {
         let data = JSON.parse(option.body)
         if(data.username === 'admin' && data.password === 'admin'){
-            Cookies.set('role','100000000');
             return {
                 code: 10000,
                 msg: '登录成功',

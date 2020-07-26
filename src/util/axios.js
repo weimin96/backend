@@ -72,6 +72,11 @@ function stopRepeatRequest(url, c){
 // 每次请求都为http头增加Authorization字段，其内容为token
 service.interceptors.request.use(
     config => {
+        console.log("请求拦截")
+        console.log(config)
+        if(config.url === '/login'){
+            return config;
+        }
         let cancel;
         config.cancelToken = new CancelToken(function executor(c) {
             cancel = c;
@@ -95,6 +100,7 @@ service.interceptors.request.use(
 // http response 拦截器
 service.interceptors.response.use(
     response => {
+        console.log("响应拦截")
        for( let i = 0; i < requestList.length; i++){
             if(requestList[i] == response.config.url){
                 // 注意，不能保证500ms必定执行，详情请了解JS的异步机制
@@ -117,7 +123,7 @@ service.interceptors.response.use(
                     router.push('error/401');
                 case 403:
                     router.push('error/403');
-                default: 
+                default:
                     Message({
                         message: `服务器错误！错误代码：${error.response.status}`,
                         type: 'error'

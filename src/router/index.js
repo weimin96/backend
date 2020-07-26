@@ -2,23 +2,30 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Auth from '@/util/auth'
 import whiteList from '@/router/whiteList'
+const Layout = () => import(/* webpackChunkName: 'index' */ '../components/layout')
+
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    redirect: '/dashboard'
+    redirect: '/home'
   },
   {
-    path: '/',
-    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+    path: '/home',
+    component: Layout,
     meta: { title: '自述文件' },
     children: [
       {
-        path: '/dashboard',
-        component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
-        meta: { title: '系统首页' }
+        path: '',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../views/Home.vue'),
+        meta: { title: '主页' }
+      },
+      {
+        path: '/register',
+        component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
+        meta: { title: '注册' }
       }
     ]
   },
@@ -26,7 +33,9 @@ const routes = [
     path: '/login',
     component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     meta: { title: '登录' }
-  }
+  },
+
+
 ]
 
 const router = new VueRouter({
@@ -58,10 +67,10 @@ router.beforeEach((to, from, next) => {
     } else {
       console.log('当前未处于登录状态，请登录')
       next({path: "/login", replace: true})
-      
+
     }
   }
-  
+
 })
 
 export default router

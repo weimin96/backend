@@ -8,6 +8,8 @@ import VueBus from 'vue-bus'
 import axios from './util/axios'
 import store from '@/store'
 
+import './components/install'
+
 
 require('./mock');
 
@@ -39,7 +41,7 @@ const app = new Vue({
   axios,
   render: h => h(App),
   mounted () {
-
+    console.log(this.$store)
   }
 }).$mount('#app')
 
